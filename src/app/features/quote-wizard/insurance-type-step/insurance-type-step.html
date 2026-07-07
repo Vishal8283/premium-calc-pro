@@ -1,0 +1,14 @@
+<div class="type-selector">
+    <h2>What would you like to insure?</h2>
+    <p class="subtitle">Choose an insurance type to get started</p>
+
+    <div class="options-grid">
+        @for (option of options; track option.type) {
+        <button class="option-card" type="button" (click)="selectType(option.type)">
+            <span class="icon">{{ option.icon }}</span>
+            <h3>{{ option.label }}</h3>
+            <p>{{ option.description }}</p>
+        </button>
+        }
+    </div>
+</div>

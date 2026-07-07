@@ -1,0 +1,58 @@
+<div class="coverage-form">
+    <h2>Enter Your Details</h2>
+
+    <form [formGroup]="form">
+        <div class="field">
+            <label for="age">Your Age</label>
+            <input id="age" type="number" formControlName="age" />
+        </div>
+
+        @if (insuranceType() === InsuranceType.VEHICLE) {
+        <div class="field">
+            <label for="vehicleAge">Vehicle Age (years)</label>
+            <input id="vehicleAge" type="number" formControlName="vehicleAge" />
+        </div>
+        <div class="field">
+            <label for="vehicleValue">Vehicle Value (₹)</label>
+            <input id="vehicleValue" type="number" formControlName="vehicleValue" />
+        </div>
+        <div class="field">
+            <label for="deductible">Deductible (₹)</label>
+            <input id="deductible" type="number" formControlName="deductible" />
+        </div>
+        <div class="field checkbox">
+            <label>
+                <input type="checkbox" formControlName="hasRoadsideAssistance" />
+                Roadside Assistance
+            </label>
+        </div>
+        <div class="field checkbox">
+            <label>
+                <input type="checkbox" formControlName="hasZeroDepreciation" />
+                Zero Depreciation Cover
+            </label>
+        </div>
+        }
+    </form>
+
+    <div class="plan-selector">
+        <button type="button" (click)="onPlanChange(PlanTier.BASIC)">Basic</button>
+        <button type="button" (click)="onPlanChange(PlanTier.STANDARD)">Standard</button>
+        <button type="button" (click)="onPlanChange(PlanTier.PREMIUM)">Premium</button>
+    </div>
+
+    @if (premium(); as p) {
+    <div class="premium-preview">
+        <h3>Estimated Premium: ₹{{ p.totalPremium }}</h3>
+        <ul>
+            @for (line of p.lines; track line.label) {
+            <li>{{ line.label }}: ₹{{ line.amount }}</li>
+            }
+        </ul>
+    </div>
+    }
+
+    <button type="button" class="confirm-btn" (click)="confirmQuote()">
+        Confirm Quote
+    </button>
+</div>

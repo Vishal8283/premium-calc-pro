@@ -1,0 +1,50 @@
+.type-selector {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+    text-align: center;
+}
+
+.subtitle {
+    color: #666;
+    margin-bottom: 2rem;
+}
+
+.options-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+}
+
+.option-card {
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 2rem 1.5rem;
+    background: white;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+
+    &:hover {
+        border-color: #3f51b5;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        transform: translateY(-2px);
+    }
+
+    .icon {
+        font-size: 2.5rem;
+        display: block;
+        margin-bottom: 0.75rem;
+    }
+
+    h3 {
+        margin: 0 0 0.5rem;
+        font-size: 1.1rem;
+    }
+
+    p {
+        margin: 0;
+        color: #777;
+        font-size: 0.9rem;
+    }
+}
