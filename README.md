@@ -1,59 +1,66 @@
-# PremiumCalcPro
+# PremiumCalc Pro
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.0.5.
+An insurance premium quote calculator built with Angular. Pick a category (vehicle, health, or life), fill in your details, and it works out a premium across three plan tiers in real time as you type no submit button, no page reload.
 
-## Development server
+Live demo: https://premium-calc-pro.vercel.app
+Repo: https://github.com/Vishal8283/premium-calc-pro
 
-To start a local development server, run:
+## Why I built this
 
-```bash
-ng serve
+I've spent the last couple of years building Angular applications for insurance and financial platforms at work, mostly dashboards and claims tracking tools. I wanted a project outside of work that used the same kind of problems real-time calculations, form-heavy UIs, reactive data but that I could build and design end to end myself.
+
+## What it does
+
+- Choose between Vehicle, Health, or Life insurance, each with its own set of relevant form fields
+- Premium recalculates live as you change any input, using RxJS and Angular signals
+- Shows Basic, Standard, and Premium pricing side by side so you can compare before picking one
+- Form validation with proper error messages (age limits, required fields, etc.)
+- Works fully with keyboard only — tab through everything, select plans with Enter/Space, proper ARIA labels for screen readers
+- Routes are lazy loaded so the initial page load stays small
+
+## Stack
+
+Angular (standalone components + signals), TypeScript, RxJS, Reactive Forms, SCSS. Tests are written with Vitest. Deployed on Vercel.
+
+## Project structure
+
+```
+src/app/
+├── core/
+│   ├── models/       # types and enums shared across the app
+│   └── services/      # PremiumCalculatorService - all the pricing logic lives here
+├── features/
+│   └── quote-wizard/
+│       ├── quote-wizard/            # holds the current step
+│       ├── insurance-type-step/     # pick a category
+│       └── coverage-details-step/   # form + plan comparison
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+The pricing logic sits entirely in one service, separate from any component. That made it easy to unit test on its own and to add Health and Life calculations after I'd already built out Vehicle without touching any UI code.
 
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## Running it yourself
 
 ```bash
-ng generate component component-name
+git clone https://github.com/Vishal8283/premium-calc-pro.git
+cd premium-calc-pro
+npm install
+ng serve -o
 ```
+Opens at localhost:4200.
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+## Tests
 
 ```bash
 ng test
 ```
+Covers the calculation logic for all three insurance types and plan tiers, form validation edge cases, and a few component-level checks (e.g. the confirm button staying disabled while the form is invalid).
 
-## Running end-to-end tests
+## Still on the list
 
-For end-to-end (e2e) testing, run:
+- A proper summary screen after confirming a quote
+- Export the quote as a PDF
+- Shareable quote links via URL params
 
-```bash
-ng e2e
-```
+## Author
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Vishal Mane — [GitHub](https://github.com/Vishal8283)
