@@ -237,6 +237,11 @@
     &:hover .arrow {
         transform: translateX(3px);
     }
+
+    &:focus-visible {
+        outline: 3px solid #3f51b5;
+        outline-offset: 3px;
+    }
 }
 
 .accent-blue {

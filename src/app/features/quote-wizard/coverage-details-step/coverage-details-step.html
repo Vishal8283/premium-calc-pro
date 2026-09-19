@@ -4,9 +4,11 @@
     <form [formGroup]="form">
         <div class="field">
             <label for="age">Your Age</label>
-            <input id="age" type="number" formControlName="age" />
+            <input id="age" type="number" formControlName="age"
+                [attr.aria-invalid]="form.controls.age.invalid && form.controls.age.touched"
+                [attr.aria-describedby]="form.controls.age.invalid && form.controls.age.touched ? 'age-error' : null" />
             @if (form.controls.age.invalid && form.controls.age.touched) {
-            <span class="error">
+            <span class="error" id="age-error" role="alert">
                 @if (form.controls.age.errors?.['required']) {
                 Age is required.
                 } @else if (form.controls.age.errors?.['min']) {
@@ -19,72 +21,88 @@
         </div>
 
         @if (insuranceType() === InsuranceType.VEHICLE) {
-        <div class="field">
-            <label for="vehicleAge">Vehicle Age (years)</label>
-            <input id="vehicleAge" type="number" formControlName="vehicleAge" />
-        </div>
-        <div class="field">
-            <label for="vehicleValue">Vehicle Value (₹)</label>
-            <input id="vehicleValue" type="number" formControlName="vehicleValue" />
-        </div>
-        <div class="field">
-            <label for="deductible">Deductible (₹)</label>
-            <input id="deductible" type="number" formControlName="deductible" />
-        </div>
-        <div class="field checkbox">
-            <label>
-                <input type="checkbox" formControlName="hasRoadsideAssistance" />
-                Roadside Assistance
-            </label>
-        </div>
-        <div class="field checkbox">
-            <label>
-                <input type="checkbox" formControlName="hasZeroDepreciation" />
-                Zero Depreciation Cover
-            </label>
-        </div>
+        <fieldset class="field-group">
+            <legend>Vehicle Details</legend>
+
+            <div class="field">
+                <label for="vehicleAge">Vehicle Age (years)</label>
+                <input id="vehicleAge" type="number" formControlName="vehicleAge" />
+            </div>
+            <div class="field">
+                <label for="vehicleValue">Vehicle Value (₹)</label>
+                <input id="vehicleValue" type="number" formControlName="vehicleValue" />
+            </div>
+            <div class="field">
+                <label for="deductible">Deductible (₹)</label>
+                <input id="deductible" type="number" formControlName="deductible" />
+            </div>
+            <div class="field checkbox">
+                <label>
+                    <input type="checkbox" formControlName="hasRoadsideAssistance" />
+                    Roadside Assistance
+                </label>
+            </div>
+            <div class="field checkbox">
+                <label>
+                    <input type="checkbox" formControlName="hasZeroDepreciation" />
+                    Zero Depreciation Cover
+                </label>
+            </div>
+        </fieldset>
         }
 
         @if (insuranceType() === InsuranceType.HEALTH) {
-        <div class="field">
-            <label for="sumInsured">Sum Insured (₹)</label>
-            <input id="sumInsured" type="number" formControlName="sumInsured" />
-        </div>
-        <div class="field">
-            <label for="familySize">Family Size (including you)</label>
-            <input id="familySize" type="number" formControlName="familySize" min="1" />
-        </div>
-        <div class="field checkbox">
-            <label>
-                <input type="checkbox" formControlName="hasPreExistingConditions" />
-                Pre-existing Medical Conditions
-            </label>
-        </div>
+        <fieldset class="field-group">
+            <legend>Health Details</legend>
+
+            <div class="field">
+                <label for="sumInsured">Sum Insured (₹)</label>
+                <input id="sumInsured" type="number" formControlName="sumInsured" />
+            </div>
+            <div class="field">
+                <label for="familySize">Family Size (including you)</label>
+                <input id="familySize" type="number" formControlName="familySize" min="1" />
+            </div>
+            <div class="field checkbox">
+                <label>
+                    <input type="checkbox" formControlName="hasPreExistingConditions" />
+                    Pre-existing Medical Conditions
+                </label>
+            </div>
+        </fieldset>
         }
 
         @if (insuranceType() === InsuranceType.LIFE) {
-        <div class="field">
-            <label for="sumAssured">Sum Assured (₹)</label>
-            <input id="sumAssured" type="number" formControlName="sumAssured" />
-        </div>
-        <div class="field">
-            <label for="termYears">Policy Term (years)</label>
-            <input id="termYears" type="number" formControlName="termYears" />
-        </div>
-        <div class="field checkbox">
-            <label>
-                <input type="checkbox" formControlName="isSmoker" />
-                Smoker
-            </label>
-        </div>
+        <fieldset class="field-group">
+            <legend>Life Details</legend>
+
+            <div class="field">
+                <label for="sumAssured">Sum Assured (₹)</label>
+                <input id="sumAssured" type="number" formControlName="sumAssured" />
+            </div>
+            <div class="field">
+                <label for="termYears">Policy Term (years)</label>
+                <input id="termYears" type="number" formControlName="termYears" />
+            </div>
+            <div class="field checkbox">
+                <label>
+                    <input type="checkbox" formControlName="isSmoker" />
+                    Smoker
+                </label>
+            </div>
+        </fieldset>
         }
     </form>
 
     <div class="plan-comparison">
-        <h3>Compare Plans</h3>
-        <div class="plan-cards">
+        <h3 id="plan-comparison-heading">Compare Plans</h3>
+        <div class="plan-cards" role="radiogroup" aria-labelledby="plan-comparison-heading">
             @for (tier of [PlanTier.BASIC, PlanTier.STANDARD, PlanTier.PREMIUM]; track tier) {
-            <div class="plan-card" [class.selected]="selectedPlan === tier" (click)="onPlanChange(tier)">
+            <div class="plan-card" [class.selected]="selectedPlan === tier" role="radio"
+                [attr.aria-checked]="selectedPlan === tier"
+                [attr.aria-label]="tier + ' plan, ₹' + allPlans()[tier].totalPremium" tabindex="0"
+                (click)="onPlanChange(tier)" (keydown.enter)="onPlanChange(tier)"
+                (keydown.space)="onPlanChange(tier); $event.preventDefault()">
                 <h4>{{ tier }}</h4>
                 <p class="price">₹{{ allPlans()[tier].totalPremium }}</p>
                 <span class="select-label">
@@ -96,7 +114,7 @@
     </div>
 
     @if (premium(); as p) {
-    <div class="premium-preview">
+    <div class="premium-preview" role="status">
         <h3>Breakdown for {{ selectedPlan }} Plan</h3>
         <ul>
             @for (line of p.lines; track line.label) {
@@ -107,8 +125,8 @@
     </div>
     }
 
-
-    <button type="button" class="confirm-btn" [disabled]="form.invalid" (click)="confirmQuote()">
+    <button type="button" class="confirm-btn" [disabled]="form.invalid" [attr.aria-disabled]="form.invalid"
+        (click)="confirmQuote()">
         Confirm Quote
     </button>
 </div>
