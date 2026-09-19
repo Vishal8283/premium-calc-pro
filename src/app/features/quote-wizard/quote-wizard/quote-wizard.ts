@@ -17,6 +17,10 @@ export class QuoteWizard {
     this.selectedType.set(type);
   }
 
+  goBack(): void {
+    this.selectedType.set(null);
+  }
+
   onQuoteReady(result: unknown): void {
     console.log('Quote confirmed:', result);
   }

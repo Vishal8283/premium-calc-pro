@@ -1,4 +1,4 @@
-import { Component, input, output, OnInit, inject } from '@angular/core';
+import { Component, input, output, OnInit, inject, computed } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { InsuranceType } from '../../../core/models/insurance-type.enum';
 import { CoverageDetails } from '../../../core/models/coverage-details.model';
@@ -6,7 +6,7 @@ import { PlanTier } from '../../../core/models/plan-tier.enum';
 import { PremiumCalculatorService } from '../../../core/services/premium-calculator';
 import { PremiumBreakdown } from '../../../core/models/premium-breakdown.model';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { combineLatest, map, startWith } from 'rxjs';
+import { map, startWith } from 'rxjs';
 
 @Component({
   selector: 'app-coverage-details-step',
@@ -50,14 +50,26 @@ export class CoverageDetailsStep implements OnInit {
 
   selectedPlan: PlanTier = PlanTier.STANDARD;
 
-  // Live premium, recalculated on every form change
-  premium = toSignal(
-    combineLatest([
-      this.form.valueChanges.pipe(startWith(this.form.value)),
-    ]).pipe(
-      map(() => this.calculateCurrent())
-    )
+  private formChanges = toSignal(
+    this.form.valueChanges.pipe(startWith(this.form.value))
   );
+
+  // Live premium for the currently selected plan (used in the summary box)
+  premium = computed(() => {
+    this.formChanges(); // establishes reactive dependency on form changes
+    return this.calculateCurrent();
+  });
+
+  // Live premium for ALL three plans at once (used in the comparison table)
+  allPlans = computed(() => {
+    this.formChanges(); // re-run whenever form changes
+    const details = this.buildDetails();
+    return {
+      [PlanTier.BASIC]: this.calculator.calculate(details, PlanTier.BASIC),
+      [PlanTier.STANDARD]: this.calculator.calculate(details, PlanTier.STANDARD),
+      [PlanTier.PREMIUM]: this.calculator.calculate(details, PlanTier.PREMIUM)
+    };
+  });
 
   ngOnInit(): void {
     // Nothing extra needed yet — form already has sensible defaults

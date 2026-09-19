@@ -1,14 +1,57 @@
+<div class="hero">
+    <div class="hero-blob blob-1"></div>
+    <div class="hero-blob blob-2"></div>
+    <div class="hero-content">
+        <span class="badge">⚡ Instant Quotes</span>
+        <h1>Get Your <span class="highlight">Insurance Quote</span> in Minutes</h1>
+        <p class="hero-subtitle">
+            Compare Basic, Standard, and Premium plans instantly — no paperwork, no waiting.
+        </p>
+    </div>
+</div>
+
 <div class="type-selector">
-    <h2>What would you like to insure?</h2>
-    <p class="subtitle">Choose an insurance type to get started</p>
+    <div class="section-heading">
+        <h2>What would you like to insure?</h2>
+        <p class="subtitle">Choose a category to get started</p>
+    </div>
 
     <div class="options-grid">
         @for (option of options; track option.type) {
-        <button class="option-card" type="button" (click)="selectType(option.type)">
-            <span class="icon">{{ option.icon }}</span>
+        <button class="option-card" [class]="option.accentClass" type="button" (click)="selectType(option.type)">
+            <div class="icon-wrap">
+                <span class="icon">{{ option.icon }}</span>
+            </div>
             <h3>{{ option.label }}</h3>
             <p>{{ option.description }}</p>
+            <span class="cta">Get Quote <span class="arrow">→</span></span>
         </button>
         }
+    </div>
+
+    <div class="trust-strip">
+        <div class="trust-item">
+            <span class="trust-icon">📊</span>
+            <div>
+                <strong>3</strong>
+                <span>Plan Tiers</span>
+            </div>
+        </div>
+        <div class="divider"></div>
+        <div class="trust-item">
+            <span class="trust-icon">⚡</span>
+            <div>
+                <strong>100%</strong>
+                <span>Instant Estimate</span>
+            </div>
+        </div>
+        <div class="divider"></div>
+        <div class="trust-item">
+            <span class="trust-icon">📄</span>
+            <div>
+                <strong>0</strong>
+                <span>Paperwork Needed</span>
+            </div>
+        </div>
     </div>
 </div>

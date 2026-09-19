@@ -1,5 +1,8 @@
 @if (!selectedType()) {
 <app-insurance-type-step (typeSelected)="onTypeSelected($event)" />
 } @else {
+<div class="wizard-header">
+    <button type="button" class="back-btn" (click)="goBack()">← Back</button>
+</div>
 <app-coverage-details-step [insuranceType]="selectedType()!" (quoteReady)="onQuoteReady($event)" />
 }

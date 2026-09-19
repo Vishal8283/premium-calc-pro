@@ -5,6 +5,17 @@
         <div class="field">
             <label for="age">Your Age</label>
             <input id="age" type="number" formControlName="age" />
+            @if (form.controls.age.invalid && form.controls.age.touched) {
+            <span class="error">
+                @if (form.controls.age.errors?.['required']) {
+                Age is required.
+                } @else if (form.controls.age.errors?.['min']) {
+                You must be at least 18.
+                } @else if (form.controls.age.errors?.['max']) {
+                Age must be 100 or under.
+                }
+            </span>
+            }
         </div>
 
         @if (insuranceType() === InsuranceType.VEHICLE) {
@@ -33,26 +44,71 @@
             </label>
         </div>
         }
+
+        @if (insuranceType() === InsuranceType.HEALTH) {
+        <div class="field">
+            <label for="sumInsured">Sum Insured (₹)</label>
+            <input id="sumInsured" type="number" formControlName="sumInsured" />
+        </div>
+        <div class="field">
+            <label for="familySize">Family Size (including you)</label>
+            <input id="familySize" type="number" formControlName="familySize" min="1" />
+        </div>
+        <div class="field checkbox">
+            <label>
+                <input type="checkbox" formControlName="hasPreExistingConditions" />
+                Pre-existing Medical Conditions
+            </label>
+        </div>
+        }
+
+        @if (insuranceType() === InsuranceType.LIFE) {
+        <div class="field">
+            <label for="sumAssured">Sum Assured (₹)</label>
+            <input id="sumAssured" type="number" formControlName="sumAssured" />
+        </div>
+        <div class="field">
+            <label for="termYears">Policy Term (years)</label>
+            <input id="termYears" type="number" formControlName="termYears" />
+        </div>
+        <div class="field checkbox">
+            <label>
+                <input type="checkbox" formControlName="isSmoker" />
+                Smoker
+            </label>
+        </div>
+        }
     </form>
 
-    <div class="plan-selector">
-        <button type="button" (click)="onPlanChange(PlanTier.BASIC)">Basic</button>
-        <button type="button" (click)="onPlanChange(PlanTier.STANDARD)">Standard</button>
-        <button type="button" (click)="onPlanChange(PlanTier.PREMIUM)">Premium</button>
+    <div class="plan-comparison">
+        <h3>Compare Plans</h3>
+        <div class="plan-cards">
+            @for (tier of [PlanTier.BASIC, PlanTier.STANDARD, PlanTier.PREMIUM]; track tier) {
+            <div class="plan-card" [class.selected]="selectedPlan === tier" (click)="onPlanChange(tier)">
+                <h4>{{ tier }}</h4>
+                <p class="price">₹{{ allPlans()[tier].totalPremium }}</p>
+                <span class="select-label">
+                    {{ selectedPlan === tier ? 'Selected' : 'Select' }}
+                </span>
+            </div>
+            }
+        </div>
     </div>
 
     @if (premium(); as p) {
     <div class="premium-preview">
-        <h3>Estimated Premium: ₹{{ p.totalPremium }}</h3>
+        <h3>Breakdown for {{ selectedPlan }} Plan</h3>
         <ul>
             @for (line of p.lines; track line.label) {
             <li>{{ line.label }}: ₹{{ line.amount }}</li>
             }
         </ul>
+        <p class="total-line">Total: ₹{{ p.totalPremium }}</p>
     </div>
     }
 
-    <button type="button" class="confirm-btn" (click)="confirmQuote()">
+
+    <button type="button" class="confirm-btn" [disabled]="form.invalid" (click)="confirmQuote()">
         Confirm Quote
     </button>
 </div>

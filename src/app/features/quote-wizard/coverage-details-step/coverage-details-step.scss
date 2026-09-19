@@ -20,6 +20,13 @@
         border-radius: 6px;
     }
 
+    .error {
+        display: block;
+        color: #d32f2f;
+        font-size: 0.85rem;
+        margin-top: 0.25rem;
+    }
+
     &.checkbox label {
         display: flex;
         align-items: center;
@@ -28,23 +35,58 @@
     }
 }
 
-.plan-selector {
-    display: flex;
-    gap: 0.5rem;
+.plan-comparison {
     margin: 1.5rem 0;
 
-    button {
-        flex: 1;
-        padding: 0.6rem;
-        border: 1px solid #3f51b5;
-        background: white;
-        color: #3f51b5;
-        border-radius: 6px;
-        cursor: pointer;
+    h3 {
+        margin-bottom: 0.75rem;
+    }
+}
 
-        &:hover {
-            background: #3f51b5;
-            color: white;
+.plan-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+}
+
+.plan-card {
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 1rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: white;
+
+    h4 {
+        margin: 0 0 0.5rem;
+        text-transform: capitalize;
+        color: #333;
+    }
+
+    .price {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: #3f51b5;
+        margin: 0.25rem 0;
+    }
+
+    .select-label {
+        font-size: 0.8rem;
+        color: #888;
+    }
+
+    &:hover {
+        border-color: #3f51b5;
+    }
+
+    &.selected {
+        border-color: #3f51b5;
+        background: #eef0fb;
+
+        .select-label {
+            color: #3f51b5;
+            font-weight: 600;
         }
     }
 }
@@ -65,6 +107,12 @@
         font-size: 0.9rem;
         color: #555;
     }
+
+    .total-line {
+        font-weight: 700;
+        margin-top: 0.75rem;
+        margin-bottom: 0;
+    }
 }
 
 .confirm-btn {
@@ -79,5 +127,10 @@
 
     &:hover {
         background: #303f9f;
+    }
+
+    &:disabled {
+        background: #b0b0b0;
+        cursor: not-allowed;
     }
 }

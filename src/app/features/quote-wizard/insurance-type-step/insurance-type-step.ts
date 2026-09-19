@@ -6,6 +6,7 @@ interface InsuranceOption {
   label: string;
   icon: string;
   description: string;
+  accentClass: string;
 }
 
 @Component({
@@ -24,19 +25,22 @@ export class InsuranceTypeStep {
       type: InsuranceType.VEHICLE,
       label: 'Vehicle Insurance',
       icon: '🚗',
-      description: 'Cover your car, bike, or commercial vehicle'
+      description: 'Cover your car, bike, or commercial vehicle',
+      accentClass: 'accent-blue'
     },
     {
       type: InsuranceType.HEALTH,
       label: 'Health Insurance',
       icon: '🏥',
-      description: 'Medical coverage for you and your family'
+      description: 'Medical coverage for you and your family',
+      accentClass: 'accent-teal'
     },
     {
       type: InsuranceType.LIFE,
       label: 'Life Insurance',
       icon: '🛡️',
-      description: 'Financial protection for your loved ones'
+      description: 'Financial protection for your loved ones',
+      accentClass: 'accent-purple'
     }
   ];
 
